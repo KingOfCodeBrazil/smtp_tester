@@ -1,16 +1,25 @@
+<style>
+.message.error {
+    color: #eb3b5a;
+}
+.message.success {
+    color: #20bf6b;
+}
+</style>
+
 <template>
     <div>
         <div class="panel">
             <div class="panel-heading"><h4>SMTP & E-mail Data</h4></div>
-            <div class="panel-body">
-                <form action="">
+            <form @submit.prevent="sendEmail()">
+                <div class="panel-body">
                     <div class="form-group col-sm-10">
-                        <label for="">Host</label>
-                        <input type="text" v-model="smtpData.host" class="form-control">
+                        <label for="">Host *</label>
+                        <input type="text" v-model="smtpData.host" class="form-control" required="required" placeholder="The SMTP Host Address (required)">
                     </div>
                     <div class="form-group col-sm-2">
-                        <label for="">Port</label>
-                        <input type="text" v-model="smtpData.port" class="form-control">
+                        <label for="">Port *</label>
+                        <input type="text" v-model="smtpData.port" class="form-control" placeholder="The SMTP Port (required)">
                     </div>
                     <div class="checkbox col-sm-12">
                         <label for=""><input type="checkbox" v-model="smtpData.secured"> Needs Secured Connection?</label>
@@ -27,29 +36,41 @@
                         <label for=""><input type="checkbox" v-model="smtpData.authentication"> Requires Authentication?</label>
                     </div>
                     <template v-if="smtpData.authentication">
-                        <div class="form-group col-sm-12">
+                        <div class="form-group col-sm-6">
                             <label for="">Login</label>
-                            <input type="text" v-model="smtpData.login" class="form-control">
+                            <input type="text" v-model="smtpData.login" class="form-control" placeholder="The authentication login (required if requires authentication)">
                         </div>
-                        <div class="form-group col-sm-12">
+                        <div class="form-group col-sm-6">
                             <label for="">Password</label>
-                            <input type="password" v-model="smtpData.password" class="form-control">
+                            <input type="password" v-model="smtpData.password" class="form-control" placeholder="The authentication password (required if requires authentication)">
                         </div>
                     </template>
-                    <div class="form-group col-sm-12">
-                        <label for="">From E-mail</label>
-                        <input type="email" v-model="smtpData.from" class="form-control">
+                    <div class="form-group col-sm-6">
+                        <label for="">From E-mail *</label>
+                        <input type="email" v-model="smtpData.from" class="form-control" placeholder="The Email that will appear as sender on the inbox (required)">
                     </div>
-                    <div class="form-group col-sm-12">
-                        <label for="">To E-mail</label>
-                        <input type="email" v-model="smtpData.to" class="form-control">
+                    <div class="form-group col-sm-6">
+                        <label for="">To E-mail *</label>
+                        <input type="email" v-model="smtpData.to" class="form-control" placeholder="The Email that receives the test (required)">
                     </div>
-                </form>
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-success" :disabled="!sendButtonEnabled">Send Test E-mail</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h4>Messages</h4>
             </div>
-            <div class="panel-footer">
-                <button class="btn btn-success" @click="sendEmail()">Send Test E-mail</button>
+            <div class="panel-body">
+                <div class="message" :class="message.type" v-for="message in messages">
+                    {{ message.datetime + ' - ' + message.content }}
+                </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -67,7 +88,8 @@
                     password: '',
                     from: 'contato@kingofcode.com.br',
                     to: ''
-                }
+                },
+                messages: []
             }
         },
 
@@ -75,15 +97,48 @@
             console.log('Component mounted.')
         },
 
+        computed: {
+            sendButtonEnabled: function() {
+                return this.smtpDataIsValid();
+            }
+        },
+
         methods: {
             sendEmail: function() {
-                axios.post('/send', this.smtpData)
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
+                AxiosWrapper.post('/send', this.smtpData, success => {
+                    this.addMessage(success.message, 'success');
+                }, error => {
+                    this.addMessage(error.message, 'error');
                 });
+            },
+
+            smtpDataIsValid: function() {
+                if(!this.smtpData.host) return false;
+                if(!this.smtpData.port) return false;
+
+                if(this.smtpData.secured) {
+                    if(!this.smtpData.encryption) return false;                    
+                }
+
+                if(this.smtpData.authentication) {
+                    if(!this.smtpData.login) return false;                    
+                    if(!this.smtpData.password) return false;                    
+                }
+
+                if(!this.smtpData.from) return false;
+                if(!this.smtpData.to) return false;
+
+                return true;
+            },
+
+            addMessage: function(content, type) {
+                let newMessage = {
+                    content: content,
+                    datetime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    type: type
+                };
+
+                this.messages.unshift(newMessage);
             }
         }
     }

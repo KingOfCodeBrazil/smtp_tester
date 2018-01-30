@@ -7,13 +7,24 @@
 
 require('./bootstrap');
 
+window.moment = require('moment');
+window.IziToast = require('izitoast');
 window.Vue = require('vue');
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Wrappers
+ * Here are the code made do simplify the proccess with Toast, Ajax, etc
  */
+
+// Toast Wrapper - Adapts the IziToast to use inside the AxiosWrapper
+window.Toast = require('./wrappers/toastWrapper');
+
+// Loader Wrapper - Adapts the Loader to use inside the AxiosWrapper
+window.Loader = require('./wrappers/loaderWrapper');
+
+// Creates an Axios wrapper that receives the toast library to internal use
+let AxiosWrapper = require('./wrappers/axiosWrapper');
+window.AxiosWrapper = new AxiosWrapper(Toast, Loader);
 
 let SmtpTester = require('./components/SMTPComponent.vue');
 

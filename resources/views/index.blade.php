@@ -20,6 +20,10 @@
         </style>
     </head>
     <body>
+        <div class="loader-overlay">
+            <div class="loader"></div>
+        </div>
+        
         <div id="app" class="container">
             <div class="row">
                 <div class="col-sm-12">
