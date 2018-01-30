@@ -15,8 +15,11 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+let SmtpTester = require('./components/SMTPComponent.vue');
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    components: {
+        SmtpTester
+    }
 });
