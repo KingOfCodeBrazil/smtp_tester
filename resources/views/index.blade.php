@@ -48,5 +48,9 @@
         </div>
     </body>
     <script src="{{ mix('js/app.js') }}"></script>
-    @include('analytics')
+
+    <!-- Include analytics view if exists -->
+    @if(View::exists('analytics'))
+        @include('analytics')
+    @endif
 </html>
