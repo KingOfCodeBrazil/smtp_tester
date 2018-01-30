@@ -43217,6 +43217,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             this.messages.unshift(newMessage);
+        },
+
+        updateSecurityData: function updateSecurityData() {
+            if (!this.smtpData.secured) {
+                this.smtpData.encryption = '';
+            }
+        },
+
+        updateAuthenticationData: function updateAuthenticationData() {
+            if (!this.smtpData.authentication) {
+                this.smtpData.login = '';
+                this.smtpData.password = '';
+            }
         }
     }
 });
@@ -43325,26 +43338,31 @@ var render = function() {
                         : _vm.smtpData.secured
                     },
                     on: {
-                      change: function($event) {
-                        var $$a = _vm.smtpData.secured,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              (_vm.smtpData.secured = $$a.concat([$$v]))
+                      change: [
+                        function($event) {
+                          var $$a = _vm.smtpData.secured,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                (_vm.smtpData.secured = $$a.concat([$$v]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.smtpData.secured = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
                           } else {
-                            $$i > -1 &&
-                              (_vm.smtpData.secured = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
+                            _vm.$set(_vm.smtpData, "secured", $$c)
                           }
-                        } else {
-                          _vm.$set(_vm.smtpData, "secured", $$c)
+                        },
+                        function($event) {
+                          _vm.updateSecurityData()
                         }
-                      }
+                      ]
                     }
                   }),
                   _vm._v(" Needs Secured Connection?")
@@ -43422,26 +43440,33 @@ var render = function() {
                         : _vm.smtpData.authentication
                     },
                     on: {
-                      change: function($event) {
-                        var $$a = _vm.smtpData.authentication,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 &&
-                              (_vm.smtpData.authentication = $$a.concat([$$v]))
+                      change: [
+                        function($event) {
+                          var $$a = _vm.smtpData.authentication,
+                            $$el = $event.target,
+                            $$c = $$el.checked ? true : false
+                          if (Array.isArray($$a)) {
+                            var $$v = null,
+                              $$i = _vm._i($$a, $$v)
+                            if ($$el.checked) {
+                              $$i < 0 &&
+                                (_vm.smtpData.authentication = $$a.concat([
+                                  $$v
+                                ]))
+                            } else {
+                              $$i > -1 &&
+                                (_vm.smtpData.authentication = $$a
+                                  .slice(0, $$i)
+                                  .concat($$a.slice($$i + 1)))
+                            }
                           } else {
-                            $$i > -1 &&
-                              (_vm.smtpData.authentication = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
+                            _vm.$set(_vm.smtpData, "authentication", $$c)
                           }
-                        } else {
-                          _vm.$set(_vm.smtpData, "authentication", $$c)
+                        },
+                        function($event) {
+                          _vm.updateAuthenticationData()
                         }
-                      }
+                      ]
                     }
                   }),
                   _vm._v(" Requires Authentication?")

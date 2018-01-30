@@ -22,7 +22,7 @@
                         <input type="text" v-model="smtpData.port" class="form-control" placeholder="The SMTP Port (required)">
                     </div>
                     <div class="checkbox col-sm-12">
-                        <label for=""><input type="checkbox" v-model="smtpData.secured"> Needs Secured Connection?</label>
+                        <label for=""><input type="checkbox" v-model="smtpData.secured" @change="updateSecurityData()"> Needs Secured Connection?</label>
                     </div>
                     <div class="form-group col-sm-12" v-if="smtpData.secured">
                         <label for="">Security Type</label>
@@ -33,7 +33,7 @@
                         </select>
                     </div>
                     <div class="checkbox col-sm-12">
-                        <label for=""><input type="checkbox" v-model="smtpData.authentication"> Requires Authentication?</label>
+                        <label for=""><input type="checkbox" v-model="smtpData.authentication" @change="updateAuthenticationData()"> Requires Authentication?</label>
                     </div>
                     <template v-if="smtpData.authentication">
                         <div class="form-group col-sm-6">
@@ -139,6 +139,19 @@
                 };
 
                 this.messages.unshift(newMessage);
+            },
+
+            updateSecurityData: function() {
+                if(!this.smtpData.secured) {
+                    this.smtpData.encryption = '';                    
+                }
+            },
+
+            updateAuthenticationData: function() {
+                if(!this.smtpData.authentication) {
+                    this.smtpData.login = '';                    
+                    this.smtpData.password = '';                    
+                }
             }
         }
     }
