@@ -11,19 +11,14 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                font-family: 'Roboto', sans-serif;
-            }
-        </style>
     </head>
     <body>
         <div class="loader-overlay">
             <div class="loader"></div>
         </div>
-        
+
+        @include('nav')
+
         <div id="app" class="container">
             <div class="row">
                 <div class="col-sm-12">

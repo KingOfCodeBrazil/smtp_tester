@@ -1,0 +1,11 @@
+html, body {
+    background: #acb6e5; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #acb6e5, #86fde8); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #acb6e5, #86fde8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
