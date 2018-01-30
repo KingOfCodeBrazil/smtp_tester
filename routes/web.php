@@ -12,3 +12,4 @@
 */
 
 Route::get('/', 'AppController@index');
+Route::post('/send', 'AppController@send');

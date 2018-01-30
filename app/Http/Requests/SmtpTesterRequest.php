@@ -27,7 +27,7 @@ class SmtpTesterRequest extends FormRequest
             'host' => 'required|string|max:255',
             'port' => 'required|integer',
             'secured' => 'required|boolean',
-            'security_type' => 'required_if:secured,true',
+            'encryption' => 'required_if:secured,true',
             'authentication' => 'required|boolean',
             'login' => 'required_if:authentication,true|string|max:255',
             'password' => 'required_if:authentication,true|string|max:255',

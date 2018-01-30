@@ -43120,9 +43120,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             smtpData: {
                 host: '',
-                port: 25,
+                port: 587,
                 secured: false,
-                securityType: '',
+                encryption: '',
                 authentication: true,
                 login: '',
                 password: '',
@@ -43133,6 +43133,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         console.log('Component mounted.');
+    },
+
+
+    methods: {
+        sendEmail: function sendEmail() {
+            axios.post('/send', this.smtpData).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     }
 });
 
@@ -43248,64 +43259,56 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.smtpData.secured,
-                    expression: "smtpData.secured"
-                  }
-                ],
-                staticClass: "form-group col-sm-12"
-              },
-              [
-                _c("label", { attrs: { for: "" } }, [_vm._v("Security Type")]),
-                _vm._v(" "),
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.smtpData.securityType,
-                        expression: "smtpData.securityType"
+            _vm.smtpData.secured
+              ? _c("div", { staticClass: "form-group col-sm-12" }, [
+                  _c("label", { attrs: { for: "" } }, [
+                    _vm._v("Security Type")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.smtpData.encryption,
+                          expression: "smtpData.encryption"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.smtpData,
+                            "encryption",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
                       }
-                    ],
-                    staticClass: "form-control",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.smtpData,
-                          "securityType",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { value: "" } }, [_vm._v("---")]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "SSL" } }, [_vm._v("SSL")]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "TLS" } }, [_vm._v("TLS")])
-                  ]
-                )
-              ]
-            ),
+                    },
+                    [
+                      _c("option", { attrs: { value: "" } }, [_vm._v("---")]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "ssl" } }, [
+                        _vm._v("SSL")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "tls" } }, [_vm._v("TLS")])
+                    ]
+                  )
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "checkbox col-sm-12" }, [
               _c("label", { attrs: { for: "" } }, [
@@ -43351,59 +43354,65 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            [
-              _c("div", { staticClass: "form-group col-sm-12" }, [
-                _c("label", { attrs: { for: "" } }, [_vm._v("Login")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.smtpData.login,
-                      expression: "smtpData.login"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text" },
-                  domProps: { value: _vm.smtpData.login },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+            _vm.smtpData.authentication
+              ? [
+                  _c("div", { staticClass: "form-group col-sm-12" }, [
+                    _c("label", { attrs: { for: "" } }, [_vm._v("Login")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.smtpData.login,
+                          expression: "smtpData.login"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.smtpData.login },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.smtpData, "login", $event.target.value)
+                        }
                       }
-                      _vm.$set(_vm.smtpData, "login", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group col-sm-12" }, [
-                _c("label", { attrs: { for: "" } }, [_vm._v("Password")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.smtpData.password,
-                      expression: "smtpData.password"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "password" },
-                  domProps: { value: _vm.smtpData.password },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-sm-12" }, [
+                    _c("label", { attrs: { for: "" } }, [_vm._v("Password")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.smtpData.password,
+                          expression: "smtpData.password"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "password" },
+                      domProps: { value: _vm.smtpData.password },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.smtpData,
+                            "password",
+                            $event.target.value
+                          )
+                        }
                       }
-                      _vm.$set(_vm.smtpData, "password", $event.target.value)
-                    }
-                  }
-                })
-              ])
-            ],
+                    })
+                  ])
+                ]
+              : _vm._e(),
             _vm._v(" "),
             _c("div", { staticClass: "form-group col-sm-12" }, [
               _c("label", { attrs: { for: "" } }, [_vm._v("From E-mail")]),
@@ -43461,7 +43470,20 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _c("div", { staticClass: "panel-footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            on: {
+              click: function($event) {
+                _vm.sendEmail()
+              }
+            }
+          },
+          [_vm._v("Send Test E-mail")]
+        )
+      ])
     ])
   ])
 }
@@ -43472,16 +43494,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "panel-heading" }, [
       _c("h4", [_vm._v("SMTP & E-mail Data")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-footer" }, [
-      _c("button", { staticClass: "btn btn-success" }, [
-        _vm._v("Send Test E-mail")
-      ])
     ])
   }
 ]

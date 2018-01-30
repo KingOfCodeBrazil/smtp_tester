@@ -15,18 +15,18 @@
                     <div class="checkbox col-sm-12">
                         <label for=""><input type="checkbox" v-model="smtpData.secured"> Needs Secured Connection?</label>
                     </div>
-                    <div class="form-group col-sm-12" v-show="smtpData.secured">
+                    <div class="form-group col-sm-12" v-if="smtpData.secured">
                         <label for="">Security Type</label>
-                        <select v-model="smtpData.securityType" class="form-control">
+                        <select v-model="smtpData.encryption" class="form-control">
                             <option value="">---</option>
-                            <option value="SSL">SSL</option>
-                            <option value="TLS">TLS</option>
+                            <option value="ssl">SSL</option>
+                            <option value="tls">TLS</option>
                         </select>
                     </div>
                     <div class="checkbox col-sm-12">
                         <label for=""><input type="checkbox" v-model="smtpData.authentication"> Requires Authentication?</label>
                     </div>
-                    <template v-show="smtpData.authentication">
+                    <template v-if="smtpData.authentication">
                         <div class="form-group col-sm-12">
                             <label for="">Login</label>
                             <input type="text" v-model="smtpData.login" class="form-control">
@@ -47,7 +47,7 @@
                 </form>
             </div>
             <div class="panel-footer">
-                <button class="btn btn-success">Send Test E-mail</button>
+                <button class="btn btn-success" @click="sendEmail()">Send Test E-mail</button>
             </div>
         </div>
     </div>
@@ -59,9 +59,9 @@
             return {
                 smtpData: {
                     host: '',
-                    port: 25,
+                    port: 587,
                     secured: false,
-                    securityType: '',
+                    encryption: '',
                     authentication: true,
                     login: '',
                     password: '',
@@ -73,6 +73,18 @@
 
         mounted() {
             console.log('Component mounted.')
+        },
+
+        methods: {
+            sendEmail: function() {
+                axios.post('/send', this.smtpData)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         }
     }
 </script>
