@@ -9,3 +9,26 @@ html, body {
 .navbar {
     margin-bottom: 20px;
 }
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.heart {
+    fill: #eb3b5a;
+    position: relative;
+    top: 5px;
+    width: 15px;
+    animation: pulse 1s ease infinite, 
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
